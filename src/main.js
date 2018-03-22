@@ -10,7 +10,7 @@ Vue.http.options.root = process.env.API_URL;
 Vue.http.interceptors.push(function (request, next) {
     const authToken = localStorage.getItem('authToken');
     if (authToken !== null) {
-        request.headers.set('Authorization', 'Bearer ' + authToken);
+        request.headers.set('Authorization2', 'Bearer ' + authToken);
     }
     next(response => {
         if ((response.status === 401) && (this !== null)) {

@@ -18,7 +18,7 @@ jobs:
       - deploy:
           name: Deploy to Production
           command: |
-            if [ "${CIRCLE_BRANCH}" == "master_prod" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
               ssh-keyscan -H ${DEPLOY_SERVER} >> ~/.ssh/known_hosts
               sed -i 's/\/dist\///g' dist/styles.css
               sed -i 's/\/dist/\.\/dist/g' index.html
