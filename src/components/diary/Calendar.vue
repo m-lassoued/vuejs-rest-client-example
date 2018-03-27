@@ -61,12 +61,12 @@ export default {
     },
     methods: {
         renderCalendar(selectedDate) {
-            this.$http.get(`diary/logged-dates/${selectedDate.year()}/${selectedDate.format('MM')}`).then(response => {
+            const email = localStorage.getItem('email');
+            const gameSlug = localStorage.getItem('gameSlug');
+            this.$http.get(`ranking/${gameSlug}/${email}/null`).then(response => {
                 const loggedDates = [];
+                loggedDates.push(moment(response.body.userRanking.date).format('YYYY-MM-DD'));
 
-                for (let item of response.body._embedded.items) {
-                    loggedDates.push(moment(item.date).format('YYYY-MM-DD'));
-                }
                 this.loggedDates = loggedDates;
             });
 

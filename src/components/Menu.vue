@@ -4,23 +4,15 @@
             <div class="row">
                 <div class="column">
                     <div class="ui inverted labeled icon menu">
-                        <h1 class="header item">Food Tracker</h1>
-                        <router-link to="/diary" class="item" active-class="active">
+                        <h1 class="header item">Investments valuation</h1>
+                        <router-link to="/dashboard" class="item" active-class="active">
                             <i class="book icon"></i>
-                            Diary
-                        </router-link>
-                        <router-link to="/foods" class="item" active-class="active">
-                            <i class="food icon"></i>
-                            Foods
-                        </router-link>
-                        <router-link to="/profile" class="item" active-class="active">
-                            <i class="settings icon"></i>
-                            Profile
+                            Dashboard
                         </router-link>
                         <div class="right item">
                             <div class="middle aligned content">
-                                <a href="#" class="ui inverted button" @click="onLogoutClicked">
-                                    Logout
+                                <a href="#" class="ui inverted button" @click="onNewParamsClicked">
+                                    New Params
                                 </a>
                             </div>
                         </div>
@@ -34,9 +26,10 @@
 <script>
 export default {
     methods: {
-        onLogoutClicked() {
-            localStorage.removeItem('authToken');
-            this.$store.commit('setIsAuthenticated', false);
+        onNewParamsClicked() {
+            localStorage.removeItem('email');
+            localStorage.removeItem('gameSlug');
+            this.$store.commit('setIsFilled', false);
         }
     }
 }

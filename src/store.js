@@ -7,67 +7,39 @@ import Vuex from 'vuex';
 Vue.use(Vuex);
 
 const state = {
-    isAuthenticated: false,
-    authErrorMessage: '',
-    availableFoods: [],
+    isFilled: false,
+    availableValuations: [],
     selectedCalendarDate: moment()
 };
 
 const getters = {
-    getAvailableFoods: state => state.availableFoods,
+    getAvailableValuations: state => state.availableValuations,
     getSelectedCalendarDate: state => state.selectedCalendarDate,
-    getManufacturers: state => state.manufacturers,
-    getManufacturerById: state => id => {
-        return find(state.manufacturers, manufacturer => manufacturer.id === id);
-    },
-    getIsAuthenticated: state => {
-        return state.isAuthenticated;
+    getIsFilled: state => {
+        return state.isFilled;
     }
 };
 
 const actions = {
-    requestFoodList({ commit }) {
-        Vue.http.get('foods?limit=100').then(response => {
-            commit('setAvailableFoods', response.body._embedded.items);
-        });
-    },
-    requestManufacturerList({ commit }) {
-        Vue.http.get('manufacturers?limit=100').then(response => {
-            commit('setManufacturers', response.body._embedded.items);
-        });
-    },
-    updateFoodInformation({ commit }, foodId) {
-        Vue.http.get(`foods/${foodId}`).then(response => {
-            commit('updateFood', response.body);
-        });
-    },
-    renewToken({ commit }, oldAuthToken) {
-        console.log('renew token');
-        Vue.http.post('login/renew', { token: oldAuthToken }).then(response => {
-            localStorage.setItem('authToken', response.body.authToken);
-            commit('setIsAuthenticated', true);
-        });
+    requestValuationList({ commit }, gameSlug, email) {
+        if(email) {
+            Vue.http.get(`ranking/${gameSlug}/${email}/null`).then(response => {
+                commit('setAvailableValuations', response.body);
+            });
+        }
     }
 };
 
 const mutations = {
-    setIsAuthenticated(state, isAuthenticated) {
-        state.isAuthenticated = isAuthenticated;
-        state.authErrorMessage = '';
-    },
-    setAvailableFoods(state, foods = []) {
-        state.availableFoods = foods;
+    setAvailableValuations(state, valuations = []) {
+        state.availableValuations = valuations;
     },
     setSelectedCalendarDate(state, date = moment()) {
         state.selectedCalendarDate = date;
     },
-    setManufacturers(state, manufacturers = []) {
-        state.manufacturers = manufacturers;
+    setIsFilled(state, isFilled) {
+        state.isFilled = isFilled;
     },
-    updateFood(state, newFood) {
-        const index = findIndex(state.availableFoods, oldFood => oldFood.id === newFood.id);
-        state.availableFoods.splice(index, 1, newFood);
-    }
 };
 
 export default new Vuex.Store({

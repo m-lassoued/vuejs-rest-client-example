@@ -2,7 +2,7 @@
     <div>
         <transition name="fade" mode="out-in" appear>
             <keep-alive>
-                <app-login v-if="!isAuthenticated" @loggedIn="onSuccessfulLogin"></app-login>
+                <app-params v-if="!isFilled" @filledIn="onSuccessfulFill"></app-params>
                 <app-dashboard v-else></app-dashboard>
             </keep-alive>
         </transition>
@@ -11,31 +11,33 @@
 
 <script>
 import { mapGetters } from 'vuex';
-import Login from './components/Login.vue';
+import Params from './components/Params.vue';
 import Dashboard from './components/Dashboard.vue'
 
 export default {
     components: {
         'app-dashboard': Dashboard,
-        'app-login': Login
+        'app-params': Params
     },
     computed: {
         ...mapGetters({
-            isAuthenticated: 'getIsAuthenticated',
+            isFilled: 'getIsFilled',
             isLoading: 'getIsLoading'
         })
     },
     methods: {
-        onSuccessfulLogin(authToken) {
-            localStorage.setItem('authToken', authToken);
-            this.$store.commit('setIsAuthenticated', true);
+        onSuccessfulFill(gameSlug, email) {
+            localStorage.setItem('gameSlug', gameSlug);
+            localStorage.setItem('email', email);
+            this.$store.commit('setIsFilled', true);
         }
     },
     created() {
-        const authToken = localStorage.getItem('authToken');
+        const email = localStorage.getItem('email');
+        const gameSlug = localStorage.getItem('gameSlug');
 
-        if (authToken !== null) {
-            this.onSuccessfulLogin(authToken);
+        if (gameSlug !== null && email !== null) {
+            this.onSuccessfulFill(gameSlug, email);
         }
     }
 }

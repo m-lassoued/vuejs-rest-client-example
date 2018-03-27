@@ -1,16 +1,14 @@
 <template>
     <div class="row">
         <div class="four wide column">
+            <app-performances-counter :lastPerformances="lastPerformances"></app-performances-counter>
             <app-calendar></app-calendar>
-            <app-add-food @foodAdded="onFoodAdded"></app-add-food>
-            <app-calories-counter :totalCaloriesConsumed="totalCaloriesConsumed"></app-calories-counter>
         </div>
         <div class="twelve wide column">
-            <app-food-diary
-                    @caloriesCountChanged="onCaloriesCountChanged"
-                    @diaryEntryRemoved="onDiaryEntryRemoved"
+            <app-valuation
+                    @performancesCountChanged="onPerformancesCountChanged"
             >
-            </app-food-diary>
+            </app-valuation>
         </div>
     </div>
 </template>
@@ -18,21 +16,19 @@
 <script>
 import moment from 'moment';
 import { mapGetters } from 'vuex';
-import AddFood from './diary/AddFood.vue';
 import Calendar from './diary/Calendar.vue';
-import CaloriesCounter from './diary/CaloriesCounter.vue';
-import FoodDiary from './diary/FoodDiary.vue';
+import PerformancesCounter from './diary/PerformancesCounter.vue';
+import ValuationDiary from './diary/ValuationDiary.vue';
 
 export default {
     components: {
         'app-calendar': Calendar,
-        'app-add-food': AddFood,
-        'app-calories-counter': CaloriesCounter,
-        'app-food-diary': FoodDiary
+        'app-performances-counter': PerformancesCounter,
+        'app-valuation': ValuationDiary
     },
     data() {
         return {
-            totalCaloriesConsumed: 0
+            lastPerformances: 0
         }
     },
     computed: {
@@ -41,20 +37,12 @@ export default {
         })
     },
     methods: {
-        onDiaryEntryRemoved() {
-            // simulate date change, in order to trigger re-rendering of calendar and diary
-            this.$store.commit('setSelectedCalendarDate', moment(this.selectedCalendarDate));
-        },
-        onFoodAdded() {
-            // simulate date change, in order to trigger re-rendering of calendar and diary
-            this.$store.commit('setSelectedCalendarDate', moment(this.selectedCalendarDate));
-        },
-        onCaloriesCountChanged(totalCaloriesConsumed) {
-            this.totalCaloriesConsumed = totalCaloriesConsumed;
+        onPerformancesCountChanged(lastPerformances) {
+            this.lastPerformances = lastPerformances;
         }
     },
     activated() {
-        // simulate date change, in order to trigger re-rendering of calendar and diary
+        // simulate date change, in order to trigger re-rendering of calendar and valuation
         this.$store.commit('setSelectedCalendarDate', moment(this.selectedCalendarDate));
     }
 }

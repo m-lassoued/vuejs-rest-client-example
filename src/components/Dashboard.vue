@@ -23,7 +23,9 @@ export default {
         'app-menu': Menu,
     },
     mounted() {
-        this.$store.dispatch('requestFoodList');
+        const email = localStorage.getItem('email');
+        const gameSlug = localStorage.getItem('gameSlug');
+        this.$store.dispatch('requestValuationList', gameSlug, email);
         this.$store.commit('setSelectedCalendarDate', moment());
     }
 }
